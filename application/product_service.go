@@ -13,3 +13,22 @@ func (s *ProductService) Get(id string) (ProductInterface, error) {
 
 	return product, nil
 }
+
+func (s *ProductService) Create(name string, price float64) (ProductInterface, error) {
+	product := NewProduct()
+	product.Name = name
+
+	_, err := product.IsValid()
+
+	if err != nil {
+		return &Product{}, err
+	}
+
+	result, err := s.Persistence.Save(product)
+
+	if err != nil {
+		return &Product{}, err
+	}
+
+	return result, err
+}
