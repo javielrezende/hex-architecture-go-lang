@@ -52,11 +52,11 @@ func (p *ProductDb) Save(product application.ProductInterface) (application.Prod
 
 	_, err := p.update(product)
 
-		if err != nil {
-			return nil, err
-		}
+	if err != nil {
+		return nil, err
+	}
 
-		return product, nil
+	return product, nil
 }
 
 func (p *ProductDb) create(product application.ProductInterface) (application.ProductInterface, error) {
@@ -66,7 +66,7 @@ func (p *ProductDb) create(product application.ProductInterface) (application.Pr
 		return nil, err
 	}
 
-	-, err = stmt.Exec(
+	_, err = stmt.Exec(
 		product.GetId(),
 		product.GetName(),
 		product.GetPrice(),
@@ -87,8 +87,8 @@ func (p *ProductDb) create(product application.ProductInterface) (application.Pr
 }
 
 func (p *ProductDb) update(product application.ProductInterface) (application.ProductInterface, error) {
-	_, err := p.db.Prepare("UPDATE products SET name = ?, price = ?, status = ? WHERE id = ?",
-	product.GetName(), product.GetPrice(), product.GetStatus(), product.GetId())
+	_, err := p.db.Exec("UPDATE products SET name = ?, price = ?, status = ? WHERE id = ?",
+		product.GetName(), product.GetPrice(), product.GetStatus(), product.GetId())
 
 	if err != nil {
 		return nil, err
